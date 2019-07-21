@@ -7,6 +7,18 @@
     <welcome-file>index.jsp</welcome-file>
     <welcome-file>default.html</welcome-file>
     <welcome-file>default.htm</welcome-file>
-    <welcome-file>default.jsp</welcome-file>
+    <welcome-file>student_list.jsp</welcome-file>
   </welcome-file-list>
+  
+  <servlet>
+<servlet-name>studentController</servlet-name>
+<servlet-class>com.datang.hrb.controller.StudentController</servlet-class>
+</servlet>
+<!--servlet-mapping标签，主要设置浏览器路径与servlet的对应关系，*.do代表任何以.do结尾的浏览器请求都会匹配成功
+然后交由名称为golbalContoller的servlet去处理此请求-->
+<servlet-mapping>
+<servlet-name>studentController</servlet-name>
+<url-pattern>*.do</url-pattern>
+</servlet-mapping>
+  
 </web-app>
