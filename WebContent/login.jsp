@@ -119,7 +119,7 @@
       </div>
       <div class="login-main">
         <p class="title">登录</p>
-        <form>
+        <form method="post" action="login.do">
         <input type="text" placeholder="请输入用户名" ><br />
         <input type="password"  placeholder="请输入密码" ><br />
         <input type="text" class="input-code" placeholder="请输入验证码"  /><img class="code" src="./images/code.jpg" /> <img class="flush" src="./images/flush.jpg" /> 

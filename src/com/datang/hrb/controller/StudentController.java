@@ -20,13 +20,13 @@ import com.datang.hrb.service.StudentService;
 import com.datang.hrb.service.Impl.StudentServiceImpl;
 import com.datang.hrb.vo.Student;
 
-
 public class StudentController extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		super.doGet(req, resp);
+		System.out.println("run in doGet");
+
+		resp.sendRedirect("ok.jsp");
 	}
 
 	/**
@@ -34,6 +34,7 @@ public class StudentController extends HttpServlet {
 	 */
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
 		String no = req.getParameter("no");
 		String name = req.getParameter("name");
 		String sex = req.getParameter("sex");
@@ -47,37 +48,49 @@ public class StudentController extends HttpServlet {
 		String action = uri.substring(uri.lastIndexOf("/") + 1, uri.indexOf(".do"));
 		HttpSession session = req.getSession();
 		StudentDao sd = new StudentDao();
-		
-		Connection conn = ConnectionUtil.getConnection(); 
+
+		Connection conn = ConnectionUtil.getConnection();
 		PreparedStatement ps = null;
-		
-		/*
-		 * if (action.equals("all")) {
-		 * 
-		 * //HttpSession session = req.getSession();
-		 * 
-		 * try { ps = conn.prepareStatement("select * from student where no=?");
-		 * ps.setString(1, "1"); ResultSet rs = ps.executeQuery();
-		 * 
-		 * if (rs != null && rs.next()) { try { ResultSet rsList = sd.getAllStudent();
-		 * session.setAttribute("no", no); ps =
-		 * conn.prepareStatement("select * from student where no = ?"); ps.setString(1,
-		 * no); //ResultSet rsList = ps.executeQuery(); List<Student> studentList = new
-		 * ArrayList<Student>(); while (rsList.next()) { Student s = new Student();
-		 * s.setNo(rsList.getString(1)); s.setName(rsList.getString(2));
-		 * s.setSex(rsList.getString(3)); s.setSclass(rsList.getString(4));
-		 * s.setMajor(rsList.getString(5)); s.setSchool(rsList.getString(6));
-		 * s.setEmail(rsList.getString(7)); s.setPhone(rsList.getString(8));
-		 * studentList.add(s); } session.setAttribute("studentList", studentList);
-		 * resp.sendRedirect("student_list.jsp"); } catch (SQLException e) {
-		 * e.printStackTrace(); } }
-		 */
-		
-		
-		if (action.equals("add")) {
-			resp.sendRedirect("student_add.jsp");
+
+		if (action.equals("login")) {
+			try {
+				ps = conn.prepareStatement("select * from student");
+				ResultSet rs = ps.executeQuery();
+
+				if (rs != null && rs.next()) {
+					List<Student> StudentList = new ArrayList<Student>();
+					while (rs.next()) {
+						Student s = new Student();
+						s.setNo(rs.getString(1));
+						s.setName(rs.getString(2));
+						s.setSex(rs.getString(3));
+						s.setSclass(rs.getString(4));
+						s.setMajor(rs.getString(5));
+						s.setSchool(rs.getString(6));
+						s.setEmail(rs.getString(7));
+						s.setPhone(rs.getString(8));
+						StudentList.add(s);
+					}
+					session.setAttribute("StudentList", StudentList);
+					resp.sendRedirect("student_list.jsp");
+				} else {
+					resp.sendRedirect("error.jsp");
+				}
+			} catch (SQLException e) {
+				resp.sendRedirect("error.jsp");
+				e.printStackTrace();
+			} finally {
+				if (ps != null) {
+					try {
+						ps.close();
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+				}
+			}
 		}
-		if (action.equals("addinto")) {
+
+		if (action.equals("add")) {
 			if (no != "" && name != "" && sex != "" && sclass != "" && major != "" && school != "" && email != ""
 					&& phone != "") {
 				Student s = new Student();
@@ -92,22 +105,16 @@ public class StudentController extends HttpServlet {
 				StudentService studentService = new StudentServiceImpl();
 				int i = studentService.addStudent(s);
 				if (i == 1) {
-					resp.sendRedirect("add_success.jsp");
+					resp.sendRedirect("student_list.jsp");
 				} else {
-					resp.sendRedirect("add_fail.jsp");
+					resp.sendRedirect("error.jsp");
 				}
 			} else {
-				resp.sendRedirect("add_fail.jsp");
+				resp.sendRedirect("error.jsp");
 			}
 		}
-
-		if (action.equals("delect")) {
-			resp.sendRedirect("student_delete.jsp");
-		}
-		if (action.equals("delect_ok.jsp")) {
+		if (action.equals("redact")) {
 			
 		}
-		
 	}
-
 }

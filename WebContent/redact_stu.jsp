@@ -142,7 +142,7 @@ body{
    </div>
    <div class="main">
    		<a href="student_list.jsp">返回学生列表页</a>
-   		<form>
+   		<form method="post" action="redact.do">
    			<span>学员学号：</span> <input type="text" /><br />
    			<span>姓名：</span> <input type="text" /><br />
    			<span>性别：</span> <input type="text" /><br />

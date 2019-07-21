@@ -1,5 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+        <%@ page import="java.util.List" %>
+    <%@ page import="java.util.ArrayList" %>
+    <%@ page import="com.datang.hrb.vo.*" %>
+    
+    <% List<Student> StudentList=(ArrayList<Student>)session.getAttribute("StudentList"); %>
+    
 <!DOCTYPE html>
 <html>
 <head>
@@ -196,7 +202,7 @@ body{
       </div>
    </div>
    <div class="main">
-   		<button class="addstu"><a href="add_stu.jsp">新增学生</a></button>
+   		<button class="addstu" ><a href="add_stu.jsp">新增学生</a></button>
    		<table border="1"  cellpadding="0" cellspacing="0">
    			<thead>
    				<tr>
@@ -212,16 +218,17 @@ body{
    				</tr>
    			</thead>
    			<tbody>
-   			<%for(int i = 0; i<20; i++){ %>
+   			<%for(int i = 0; i<StudentList.size(); i++){ 
+   			Student stu=StudentList.get(i);%>
    				<tr>
-   					<td>2017053285</td>
-   					<td>王二毛</td>
-   					<td class="gender">男</td>
-   					<td>大数据xxxx班</td>
-   					<td>大数据</td>
-   					<td class="school-name">学校名称</td>
-   					<td class="email">123456@123.com</td>
-   					<td>12345678910</td>
+   					<td><%=stu.getNo() %></td>
+   					<td><%=stu.getName() %></td>
+   					<td class="gender"><%=stu.getSex() %></td>
+   					<td><%=stu.getSclass() %></td>
+   					<td><%=stu.getMajor() %></td>
+   					<td class="school-name"><%=stu.getSchool() %></td>
+   					<td class="email"><%=stu.getEmail() %></td>
+   					<td><%=stu.getPhone() %></td>
    					<td>
    						<button class="redact"><a href="redact_stu.jsp">编辑</a></button>
    						<button class="del">删除</button>
@@ -232,12 +239,13 @@ body{
    		</table>
    </div>
 	<div class="paging">
-		<%for(int i = 0; i<5; i++){ %>
-			<span class="pages"><%=i+1 %></span>
+	<%double num=Math.ceil(StudentList.size()/20); %>
+		<%for(int i = 0; i<=num; i++){ %>
+			<span class="pages"><%=i +1%></span>
 			<%} %>
 			<input type="text" />
 			<button class="linkto">跳转</button>
-			<span class="total">共   X页</span>
+			<span class="total">共 x页</span>
 	</div>
 	<script>
 		var test = window.location.href;
