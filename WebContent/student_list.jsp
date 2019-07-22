@@ -230,8 +230,14 @@ body{
    					<td class="email"><%=stu.getEmail() %></td>
    					<td><%=stu.getPhone() %></td>
    					<td>
-   						<button class="redact"><a href="redact_stu.jsp">编辑</a></button>
+   					<form method="post" action="redact.do">
+   						<input type="hidden" name="stu_code"  value="<%=stu.getNo() %>"/>
+   						<button type=""submit class="redact">编辑</button>
+   					</form>
+   					<form method="post" action="delete.do">
+   					<input type="hidden" name="stu_no"  value="<%=stu.getNo() %>"/>
    						<button class="del">删除</button>
+   						</form>
    					</td>
    				</tr>
    				<%} %>

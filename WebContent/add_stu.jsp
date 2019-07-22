@@ -1,5 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    
+     <%@ page import="java.util.List" %>
+    <%@ page import="java.util.ArrayList" %>
+    <%@ page import="com.datang.hrb.vo.*" %>
+    
+    <% List<Student> StudentList=(ArrayList<Student>)session.getAttribute("StudentList"); %>
+    
 <!DOCTYPE html>
 <html>
 <head>
@@ -143,7 +150,7 @@ body{
    <div class="main">
    		<a href="student_list.jsp">返回学生列表页</a>
    		<form method="post" action="add.do">
-   			<span>学员学号：</span> <input type="text" name="no"/><br />
+   			<span>学员学号：</span> <input type="text" name="no" "/><br />
    			<span>姓名：</span> <input type="text" name="name"/><br />
    			<span>性别：</span> <input type="text" name="sex"/><br />
    			<span>班级名称：</span> <input type="text"  name="sclass"/><br />

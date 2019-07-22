@@ -1,5 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    
+    <%@ page import="java.util.List" %>
+    <%@ page import="java.util.ArrayList" %>
+    <%@ page import="com.datang.hrb.vo.*" %>
+    
+    <% List<Student> StudentList=(ArrayList<Student>)session.getAttribute("StudentList"); %>
+    <% Student s=(Student)session.getAttribute("s"); %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -142,15 +149,15 @@ body{
    </div>
    <div class="main">
    		<a href="student_list.jsp">返回学生列表页</a>
-   		<form method="post" action="redact.do">
-   			<span>学员学号：</span> <input type="text" /><br />
-   			<span>姓名：</span> <input type="text" /><br />
-   			<span>性别：</span> <input type="text" /><br />
-   			<span>班级名称：</span> <input type="text" /><br />
-   			<span>专业名称：</span> <input type="text" /><br />
-   			<span>学校名称：</span> <input type="text" /><br />
-   			<span>邮箱：</span> <input type="text" /><br />
-   			<span>手机号：</span> <input type="text" /><br />
+   		<form method="post" action="redact_ok.do">
+   			<span>学员学号：</span> <input type="text" value="<%=s.getNo()%>"  name="no"/><br />
+   			<span>姓名：</span> <input type="text"  value="<%=s.getName()%>" name="name"/><br />
+   			<span>性别：</span> <input type="text"  value="<%=s.getSex()%>"name="sex"/><br />
+   			<span>班级名称：</span> <input type="text"   value="<%=s.getSclass()%>"name="sclass"/><br />
+   			<span>专业名称：</span> <input type="text"  value="<%=s.getMajor()%>"name="major"/><br />
+   			<span>学校名称：</span> <input type="text"  value="<%=s.getSchool()%>"name="school"/><br />
+   			<span>邮箱：</span> <input type="text"  value="<%=s.getEmail()%>"name="email"/><br />
+   			<span>手机号：</span> <input type="text"  value="<%=s.getPhone()%>"name="phone"/><br />
    			<input class="save" type="submit" value="保存" />
    		</form>
    </div>

@@ -21,11 +21,11 @@ import com.datang.hrb.service.Impl.StudentServiceImpl;
 import com.datang.hrb.vo.Student;
 
 public class StudentController extends HttpServlet {
+	static String stu_code = null;
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		System.out.println("run in doGet");
-
 		resp.sendRedirect("ok.jsp");
 	}
 
@@ -34,87 +34,76 @@ public class StudentController extends HttpServlet {
 	 */
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		req.setCharacterEncoding("UTF-8");
+		Student s = new Student();
+		s.setNo(req.getParameter("no"));
+		s.setName(req.getParameter("name"));
+		s.setSex(req.getParameter("sex"));
+		s.setSclass(req.getParameter("sclass"));
+		s.setMajor(req.getParameter("major"));
+		s.setSchool(req.getParameter("school"));
+		s.setEmail(req.getParameter("email"));
+		s.setPhone(req.getParameter("phone"));
 
-		String no = req.getParameter("no");
-		String name = req.getParameter("name");
-		String sex = req.getParameter("sex");
-		String sclass = req.getParameter("sclass");
-		String major = req.getParameter("major");
-		String school = req.getParameter("school");
-		String email = req.getParameter("email");
-		String phone = req.getParameter("phone");
+		// String username = req.getParameter("username");
+		// String password = req.getParameter("password");
 
 		String uri = req.getRequestURI();
 		String action = uri.substring(uri.lastIndexOf("/") + 1, uri.indexOf(".do"));
 		HttpSession session = req.getSession();
-		StudentDao sd = new StudentDao();
-
-		Connection conn = ConnectionUtil.getConnection();
-		PreparedStatement ps = null;
 
 		if (action.equals("login")) {
-			try {
-				ps = conn.prepareStatement("select * from student");
-				ResultSet rs = ps.executeQuery();
-
-				if (rs != null && rs.next()) {
-					List<Student> StudentList = new ArrayList<Student>();
-					while (rs.next()) {
-						Student s = new Student();
-						s.setNo(rs.getString(1));
-						s.setName(rs.getString(2));
-						s.setSex(rs.getString(3));
-						s.setSclass(rs.getString(4));
-						s.setMajor(rs.getString(5));
-						s.setSchool(rs.getString(6));
-						s.setEmail(rs.getString(7));
-						s.setPhone(rs.getString(8));
-						StudentList.add(s);
-					}
-					session.setAttribute("StudentList", StudentList);
-					resp.sendRedirect("student_list.jsp");
-				} else {
-					resp.sendRedirect("error.jsp");
-				}
-			} catch (SQLException e) {
-				resp.sendRedirect("error.jsp");
-				e.printStackTrace();
-			} finally {
-				if (ps != null) {
-					try {
-						ps.close();
-					} catch (SQLException e) {
-						e.printStackTrace();
-					}
-				}
-			}
+			StudentDao sd = new StudentDao();
+			ResultSet rs = sd.getAllStudent(session, req, resp);
 		}
-
-		if (action.equals("add")) {
-			if (no != "" && name != "" && sex != "" && sclass != "" && major != "" && school != "" && email != ""
-					&& phone != "") {
-				Student s = new Student();
-				s.setNo(no);
-				s.setName(name);
-				s.setSex(sex);
-				s.setSclass(sclass);
-				s.setSchool(school);
-				s.setEmail(email);
-				s.setPhone(phone);
-				s.setMajor(major);
-				StudentService studentService = new StudentServiceImpl();
-				int i = studentService.addStudent(s);
-				if (i == 1) {
-					resp.sendRedirect("student_list.jsp");
-				} else {
-					resp.sendRedirect("error.jsp");
-				}
+			if (action.equals("add")) {			//增加学生
+			StudentService studentService = new StudentServiceImpl();
+			int i = studentService.addStudent(s);
+			if (i == 1) {
+				StudentDao sd = new StudentDao();
+				ResultSet rs = sd.getAllStudent(session, req, resp);
+				//resp.sendRedirect("student_list.jsp");
 			} else {
 				resp.sendRedirect("error.jsp");
 			}
 		}
-		if (action.equals("redact")) {
-			
+
+		if (action.equals("redact")) {					//点击修改按钮
+			stu_code = req.getParameter("stu_code");
+			StudentDao sd = new StudentDao();
+			sd.toalter(stu_code, session, req, resp);
+			// System.out.println("学号："+stu_code);
 		}
+		if (action.equals("redact_ok")) {			//点击保存修改
+			StudentDao sd = new StudentDao();
+			int i=sd.alterstu(stu_code, req, resp);
+			if(i==1) {
+				ResultSet rs = sd.getAllStudent(session, req, resp);
+			}else {
+				resp.sendRedirect("error.jsp");
+			}
+		}
+		
+		if(action.equals("delete")) {			//删除按钮
+			String stu_no= req.getParameter("stu_no");
+			StudentDao sd = new StudentDao();
+			int i=sd.deletestu(stu_no, req, resp);
+			if(i==1) {
+				ResultSet rs = sd.getAllStudent(session, req, resp);
+			}else {
+				resp.sendRedirect("error.jsp");
+			}
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 	}
 }
