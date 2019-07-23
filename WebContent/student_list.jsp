@@ -5,7 +5,8 @@
     <%@ page import="com.datang.hrb.vo.*" %>
     
     <% List<Student> StudentList=(ArrayList<Student>)session.getAttribute("StudentList"); %>
-    
+    <% String accounts=(String)session.getAttribute("accounts"); %>
+   <%--  <% String page=(String)session.getAttribute("page"); %> --%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -44,7 +45,7 @@ body{
         font-size: 18px;
       }
     .lab-menu {
-      width: 890px;
+      width: 850px;
       margin-left: 25px;
       display: inline-flex;
       justify-content: flex-start;
@@ -89,6 +90,7 @@ body{
 	    padding: 12px;
 	    cursor: pointer;
 	    margin-bottom: 20px;
+	    
       }
       .main{	
 	    position: relative;
@@ -168,7 +170,7 @@ body{
     	width: 50px;
     	height: 24px;
     	text-align: center;
-    	margin-left: 15px;
+    	margin-left: 13px;
     }
     .linkto{
     	height: 28px;
@@ -189,6 +191,26 @@ body{
     .btn{
     display:inline-block;
     }
+    
+    .main input {
+         margin-bottom: 30px;
+         width: 200px;
+         height: 40px;
+         border-radius: 6px;
+	    padding: 10px;
+	    box-sizing: border-box;
+	    font-size: 16px;
+	    border: 1px solid #999;
+	    outline: none;
+      }
+      
+    .ma tr{
+    background-color: #ffffff;
+    }
+    .ma td{
+    background-color: #ffffff;
+    }
+    
 </style>
 
 </head>
@@ -200,12 +222,20 @@ body{
           <li class="menu-home">学生管理</li>
           <li class="menu-home" > <a href="class_list.jsp">班级管理</a></li>
          </ul>
-          <span>XXX</span>
+          <span><%=accounts%></span>
           <a href="login.jsp"  class="exit" >退出</a>
       </div>
    </div>
    <div class="main">
-   		<button class="addstu" ><a href="add_stu.jsp">新增学生</a></button>
+   <form method="post" action="search.do">
+   		<table class="ma">
+   		<tr>
+   		<td><button class="addstu" ><a href="add_stu.jsp">新增学生</a></button></td>
+   		<td><input type="text" name="search"/></td>
+   		<td><button class="addstu" >搜索</button></td>
+   		</tr>
+   		</table>
+   		</form>
    		<table border="1"  cellpadding="0" cellspacing="0">
    			<thead>
    				<tr>
@@ -247,15 +277,18 @@ body{
    			</tbody>
    		</table>
    </div>
-	<%-- <div class="paging">
-	<%double num=Math.ceil(StudentList.size()/20); %>
-		<%for(int i = 0; i<=num; i++){ %>
-			<span class="pages"><%=i +1%></span>
+	<div class="paging">
+	<%double num=Math.ceil(StudentList.size()/20); 
+			int i=0;%>
+		<%for(i = 0; i<=num; i++){ %>
+		
+			<span class="pages" ><%=i +1%></span>
+		
 			<%} %>
 			<input type="text" />
 			<button class="linkto">跳转</button>
-			<span class="total">共 x页</span>
-	</div> --%>
+			<span class="total">共 <%=i %>页</span>
+	</div>
 	<script>
 		var test = window.location.href;
 		if((test.substring(test.lastIndexOf('/')+1,test.indexOf(".jsp"))) == "student_list"){

@@ -7,7 +7,7 @@
     
     <% List<Student> StudentList=(ArrayList<Student>)session.getAttribute("StudentList"); %>
     <% Student s=(Student)session.getAttribute("s"); %>
-    
+    <% String accounts=(String)session.getAttribute("accounts"); %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -46,7 +46,7 @@ body{
         font-size: 18px;
       }
     .lab-menu {
-      width: 890px;
+      width: 850px;
       margin-left: 25px;
       display: inline-flex;
       justify-content: flex-start;
@@ -144,7 +144,7 @@ body{
           <li class="menu-home"><a href="student_list.jsp">学生管理</a></li>
           <li class="menu-home" ><a href="class_list.jsp">班级管理</a></li>
          </ul>
-          <span>XXX</span>
+          <span><%=accounts%></span>
           <a href="login.jsp"  class="exit" >退出</a>
       </div>
    </div>

@@ -91,8 +91,17 @@
           color: #7a7f85;
         }
 </style>
+
+<script type="text/javascript">
+if(document.getElementById("name").value.length>11)
+{
+alert("太长了");
+}
+</script>
+
 </head>
 <body>
+
 	<div id="login" >
     <div class="login-bg"></div>
     <div class="login-box">
@@ -101,10 +110,10 @@
       </div>
       <div class="login-main">
         <p class="title">注册</p>
-        <form>
-        <input type="text" placeholder="请输入用户名" ><br />
-        <input type="number" placeholder="请输入手机号" ><br />
-        <input type="password" placeholder="请输入密码" ><br />
+        <form  method="post" action="register.do">
+        <input type="text" name="accounts" placeholder="请输入用户名"  required="required" /><br />
+        <input type="number" name="phone" placeholder="请输入手机号"  required="required" maxlength="11"  /><br />
+        <input type="password" name="password" placeholder="请输入密码"  required="required" /><br />
         <input type="submit" class="button" value="注册">
         </form>
         <p class="help">
@@ -113,5 +122,7 @@
       </div>
     </div>
     
+
+
 </body>
 </html>

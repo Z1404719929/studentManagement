@@ -101,10 +101,10 @@
       </div>
       <div class="login-main">
         <p class="title">找回密码</p>
-        <form>
-        <input type="text" placeholder="请输入用户名" ><br />
-        <input type="number" placeholder="请输入手机号" ><br />
-        <input type="password" placeholder="请输入新密码" ><br />
+        <form method="post" action="resetp.do">
+        <input type="text" placeholder="请输入用户名" name="accounts"><br />
+        <input type="number" placeholder="请输入手机号" name="phone"><br />
+        <input type="password" placeholder="请输入新密码" name="password"><br />
         <input type="submit" class="button" value="提交">
         </form>
         <p class="help">

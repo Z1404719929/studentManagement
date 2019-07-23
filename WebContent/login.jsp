@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    
 <!DOCTYPE html>
 <html>
 <head>
@@ -70,12 +71,12 @@
 	    outline: none;
       }
       .login-main .input-code{
-      	width: 278px;
+      	width: 298px;
       	height: 60px;
       }
       .login-main .code{
       	vertical-align: middle;
-      	margin-left:20px;
+      	margin-left:15px;
       }
       .login-main .flush{
       		vertical-align: middle;
@@ -120,9 +121,10 @@
       <div class="login-main">
         <p class="title">登录</p>
         <form method="post" action="login.do">
-        <input type="text" placeholder="请输入用户名" ><br />
-        <input type="password"  placeholder="请输入密码" ><br />
-        <input type="text" class="input-code" placeholder="请输入验证码"  /><img class="code" src="./images/code.jpg" /> <img class="flush" src="./images/flush.jpg" /> 
+        <input type="text" name="accounts"  placeholder="请输入用户名" required="required" /><br />
+        <input type="password"  name="password"  placeholder="请输入密码"  required="required" /><br />
+        <input type="text" name="img_code" class="input-code" placeholder="请输入验证码"  required="required"/>
+        <img onclick="imgChange()" class="code" src="imgGetCode.do"/> <img onclick="imgChange()" class="flush" src="./images/flush.jpg" /> 
         <input type="submit" class="button" value="登录">
         </form>
         <p class="help">
@@ -131,6 +133,12 @@
         </p>
       </div>
     </div>
-    
+    <script>
+function imgChange() {
+    var img = document.getElementsByClassName("code")[0];
+    var time = new Date().getTime();
+    img.src = "imgGetCode.do?t=" + time;
+   }
+  </script>
 </body>
 </html>

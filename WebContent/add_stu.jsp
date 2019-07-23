@@ -6,7 +6,7 @@
     <%@ page import="com.datang.hrb.vo.*" %>
     
     <% List<Student> StudentList=(ArrayList<Student>)session.getAttribute("StudentList"); %>
-    
+    <% String accounts=(String)session.getAttribute("accounts"); %>
     
 <!DOCTYPE html>
 <html>
@@ -46,7 +46,7 @@ body{
         font-size: 18px;
       }
     .lab-menu {
-      width: 890px;
+      width: 850px;
       margin-left: 25px;
       display: inline-flex;
       justify-content: flex-start;
@@ -144,21 +144,21 @@ body{
           <li class="menu-home"><a href="student_list.jsp">学生管理</a></li>
           <li class="menu-home" ><a href="class_list.jsp">班级管理</a></li>
          </ul>
-          <span>XXX</span>
+          <span><%=accounts%></span>
           <a href="login.jsp"  class="exit" >退出</a>
       </div>
    </div>
    <div class="main">
    		<a href="student_list.jsp">返回学生列表页</a>
    		<form method="post" action="add.do">
-   			<span>学员学号：</span> <input type="text" name="no"  required="required"  /><br />
-   			<span>姓名：</span> <input type="text" name="name"required="required"  /><br />
-   			<span>性别：</span> <input type="text" name="sex" required="required"  /><br />
-   			<span>班级名称：</span> <input type="text"  name="sclass"required="required"  /><br />
-   			<span>专业名称：</span> <input type="text" name="major"required="required"  /><br />
-   			<span>学校名称：</span> <input type="text" name="school"required="required"/><br />
-   			<span>邮箱：</span> <input type="text" name="email" required="required"/><br />
-   			<span>手机号：</span> <input type="text" name="phone" required="required" placeholder="11位0-9的数字" /><br />
+   			<span>学员学号：</span> <input type="text" name="no"  required="required"  placeholder="8位0-9的数字" maxlength=8 onblur="if(/\d{8}/gi.test(this.value)?true:false){0}else{alert('学号八位');}"/><br />
+   			<span>姓名：</span> <input type="text" name="name"/><br />
+   			<span>性别：</span> <input type="text" name="sex" required="required"  placeholder="男 女"/><br />
+   			<span>班级名称：</span> <input type="text"  name="sclass"required="required"  placeholder="例 哈尔滨学院-2345"/><br />
+   			<span>专业名称：</span> <input type="text" name="major"required="required"  placeholder="例 计算机"/><br />
+   			<span>学校名称：</span> <input type="text" name="school"required="required" placeholder="例 哈尔滨学院"/><br />
+   			<span>邮箱：</span> <input type="email" name="email" required="required"placeholder="例 123@qq.com"/><br />
+   			<span>手机号：</span> <input type="text" name="phone" required="required" placeholder="11位0-9的数字" maxlength=11 onblur="if(/\d{11}/gi.test(this.value)?true:false){0}else{alert('手机号十一位');}"/><br />
    			<input class="save" type="submit" value="保存" />
    		</form>
    </div>

@@ -1,5 +1,6 @@
 package com.datang.hrb.controller;
 
+import java.awt.image.RenderedImage;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -7,8 +8,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,21 +21,69 @@ import javax.servlet.http.HttpSession;
 import com.datang.hrb.dao.ConnectionUtil;
 import com.datang.hrb.dao.SclassDao;
 import com.datang.hrb.dao.StudentDao;
+import com.datang.hrb.dao.UserDao;
+import com.datang.hrb.service.LoginService;
+import com.datang.hrb.service.RegisterService;
 import com.datang.hrb.service.SclassService;
 import com.datang.hrb.service.StudentService;
+import com.datang.hrb.service.Impl.LoginServiceImpl;
+import com.datang.hrb.service.Impl.RegisterServiceImpl;
 import com.datang.hrb.service.Impl.SclassServiceImpl;
 import com.datang.hrb.service.Impl.StudentServiceImpl;
+import com.datang.hrb.util.ImgCodeUtil;
+import com.datang.hrb.util.MD5Util;
 import com.datang.hrb.vo.Sclass;
 import com.datang.hrb.vo.Student;
+import com.datang.hrb.vo.User;
 
 public class StudentController extends HttpServlet {
 	static String stu_code = null;
 	static String sc_code = null;
+	String img_code = null;
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		/*
+		 * System.out.println("run in doGet"); resp.sendRedirect("ok.jsp");
+		 */
 		System.out.println("run in doGet");
-		resp.sendRedirect("ok.jsp");
+
+		// 调用工具类生成的验证码和验证码图片
+		Map<String, Object> codeMap = ImgCodeUtil.generateCodeAndPic();
+
+		// 将四位数字的验证码保存到Session中。
+		HttpSession session = req.getSession();
+		session.setAttribute("code", codeMap.get("code").toString());
+
+		// 禁止图像缓存。
+		resp.setHeader("Pragma", "no-cache");
+		resp.setHeader("Cache-Control", "no	-cache");
+		resp.setDateHeader("Expires", -1);
+
+		resp.setContentType("image/jpeg");
+
+		// 将图像输出到Servlet输出流中。
+		ServletOutputStream sos;
+		try {
+			sos = resp.getOutputStream();
+			ImageIO.write((RenderedImage) codeMap.get("codePic"), "jpeg", sos);
+			sos.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		/*
+		 * /////////////////////////////////////////////////////////////////////////////
+		 * //// // 接受表单内容 req.setCharacterEncoding("UTF-8"); String no =
+		 * req.getParameter("no"); String name = req.getParameter("name"); // 向页面传值
+		 * req.setAttribute("no", no); req.setAttribute("name", name); // 业务需要
+		 * StudentService stu = new StudentService(); // 查询消息列表并传给页面
+		 * req.setAttribute("studentList", stu.queryStudentList(no, name)); // 向页面跳转
+		 * req.getRequestDispatcher("/WEB-INF/jsp/list.jsp").forward(req, resp);
+		 * /////////////////////////////////////////////////////////////////////////////
+		 * ///
+		 */
 	}
 
 	/**
@@ -56,6 +108,10 @@ public class StudentController extends HttpServlet {
 		sc.setZy(req.getParameter("所属专业"));
 		// s.set(req.getParameter("sclass"));
 
+		String accounts = req.getParameter("accounts");
+		String password = req.getParameter("password");
+		String phone= req.getParameter("phone");
+		String imgcode = req.getParameter("imgcode");
 		// String username = req.getParameter("username");
 		// String password = req.getParameter("password");
 
@@ -63,13 +119,68 @@ public class StudentController extends HttpServlet {
 		String action = uri.substring(uri.lastIndexOf("/") + 1, uri.indexOf(".do"));
 		HttpSession session = req.getSession();
 
-		if (action.equals("login")) {
-			StudentDao sd = new StudentDao();
-			ResultSet rs = sd.getAllStudent(session, req, resp);
-			// SclassDao scd = new SclassDao();
-			// ResultSet rs = scd.getAllSclass(session, req, resp);
+		if (action.equals("register")) {
+			if (accounts != "" && password != "") {
+				RegisterService registerService = new RegisterServiceImpl();
+				User user = new User();
+				user.setAccounts(accounts);
+				user.setPassword(MD5Util.getMD5(password.getBytes()));
+				user.setPhone(phone);
+				int i = registerService.saveUser(user);
+				if (i == 1) {
+					resp.sendRedirect("login.jsp");
+				} else {
+					resp.sendRedirect("error.jsp");
+				}
+			} else {
+				resp.sendRedirect("error.jsp");
+			}
+		} else if (action.equals("login")) {
+			// img_code = req.getParameter("img_code");
+			// System.out.println(img_code);
+			System.out.println("login");
+			User user = new User();
+			user.setAccounts(accounts);
+			System.out.println(accounts);
+			UserDao u = new UserDao();
+			if (u.getUsername(accounts) == 1) {
+				user.setPassword(MD5Util.getMD5(password.getBytes()));
+				LoginService loginService = new LoginServiceImpl();
+				System.out.println("6");
+				if (loginService.login(user) == "student_list.jsp") {
+					// img_code = req.getParameter("img_code");
+					// System.out.println("session保存的验证码=="+session.getAttribute("code"));
+					if (session.getAttribute("code").equals(req.getParameter("img_code"))) {
+						// System.out.println("session保存的验证码=="+session.getAttribute("code"));
+						session = req.getSession();
+						session.setAttribute("accounts", accounts);
 
+						/* resp.sendRedirect("student_list.jsp"); */
+						System.out.println("4");
+						StudentDao sd = new StudentDao();
+						ResultSet rs = sd.getAllStudent(session, req, resp);
+						// password = MD5Util.getMD5(password.getBytes());
+					} else {
+						System.out.println("验证码问题");
+						resp.sendRedirect("yzm_fail.jsp");
+					}
+				} else {
+					System.out.println("密码问题");
+					resp.sendRedirect("password_fail.jsp");
+				}
+			}else {
+				System.out.println("用户名没有");
+				resp.sendRedirect("accounts_fail.jsp");
+			}
 		}
+
+		/*
+		 * if (action.equals("login")) { StudentDao sd = new StudentDao(); ResultSet rs
+		 * = sd.getAllStudent(session, req, resp); // SclassDao scd = new SclassDao();
+		 * // ResultSet rs = scd.getAllSclass(session, req, resp);
+		 * 
+		 * }
+		 */
 
 		if (action.equals("add")) { // 增加学生
 			StudentService studentService = new StudentServiceImpl();
@@ -78,7 +189,7 @@ public class StudentController extends HttpServlet {
 				StudentDao sd = new StudentDao();
 				ResultSet rs = sd.getAllStudent(session, req, resp);
 				// resp.sendRedirect("student_list.jsp");
-			} else{
+			} else {
 				resp.sendRedirect("add_stu.jsp");
 			}
 
@@ -92,7 +203,7 @@ public class StudentController extends HttpServlet {
 				ResultSet rs = scd.getAllSclass(session, req, resp);
 				// resp.sendRedirect("student_list.jsp");
 			} else {
-				resp.sendRedirect("error.jsp");
+				resp.sendRedirect("add_class.jsp");
 			}
 		}
 
@@ -152,7 +263,28 @@ public class StudentController extends HttpServlet {
 				resp.sendRedirect("error.jsp");
 			}
 		}
-		
-		
+
+		if (action.equals("resetp")) { // 修改密码
+			accounts = req.getParameter("accounts");
+			password = req.getParameter("password");
+			phone = req.getParameter("phone");
+			UserDao ud = new UserDao();
+			User u = new User();
+			u.setPassword(MD5Util.getMD5(password.getBytes()));
+			password = u.getPassword();
+			System.out.println(password);
+			int i = ud.getPassword(password, accounts, phone);
+			if (i == 1) {
+				resp.sendRedirect("login.jsp");
+			} else {
+				resp.sendRedirect("error.jsp");
+			}
+		}
+
+		if (action.equals("search")) { // 搜索功能
+			StudentDao sd = new StudentDao();
+			ResultSet rs = sd.getSearch(session, req, resp);
+		}
+
 	}
 }
