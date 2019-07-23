@@ -148,7 +148,7 @@ body{
       </div>
    </div>
    <div class="main">
-   		<a href="student_list.jsp">返回班级列表页</a>
+   		<a href="class_list.jsp">返回班级列表页</a>
    		<form method="post" action="class_redact_ok.do">
    			<span>班级名称：</span> <input type="text"  value="<%=sc.getName()%>"  name="教室名称" required="required"/><br />
    			<span>所属院校：</span> <input type="text" value="<%=sc.getYx()%>"  name="所属院校" required="required"/><br />

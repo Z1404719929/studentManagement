@@ -87,7 +87,7 @@ public class SclassDao {
 		return i;
 		}
 	
-	public void toalter(String sc_code,HttpSession session,HttpServletRequest req, HttpServletResponse resp) throws IOException {	//去修改学生页面
+	public void toalter(String sc_code,HttpSession session,HttpServletRequest req, HttpServletResponse resp) throws IOException {	//去修改页面
 		Connection conn = ConnectionUtil.getConnection();
 		PreparedStatement ps = null;
 		ResultSet rs=null;
@@ -186,5 +186,57 @@ public class SclassDao {
 		}
 		return i;
 	}
+	
+	public ResultSet getSearch(HttpSession session, HttpServletRequest req, HttpServletResponse resp)
+			throws IOException {
+		// 搜索
+
+		Connection conn = ConnectionUtil.getConnection();
+		PreparedStatement ps = null;
+		String search = req.getParameter("class_search");
+		ResultSet rs = null;
+		System.out.println("查询内容"+search);
+		if(search!="") {
+		try {
+			ps = conn.prepareStatement("select * from class where 教室名称=? or 所属专业=? or 所属院校=? ");
+			ps.setString(1, search);
+			ps.setString(2, search);
+			ps.setString(3, search);
+			//ps.setInt(4, search);
+			rs = ps.executeQuery();
+			if (rs != null ) {
+				List<Sclass> SclassList = new ArrayList<Sclass>();
+				while (rs.next()) {
+					Sclass s = new Sclass();
+					s.setName(rs.getString(1));
+					s.setYx(rs.getString(2));
+					s.setZy(rs.getString(3));
+					s.setNum(rs.getInt(4));
+					SclassList.add(s);
+				}
+				session.setAttribute("SclassList", SclassList);
+				resp.sendRedirect("class_list.jsp");
+			} else {
+				resp.sendRedirect("error.jsp");
+			}
+		} catch (SQLException e) {
+			resp.sendRedirect("error.jsp");
+			e.printStackTrace();
+		} finally {
+			if (ps != null) {
+				try {
+					ps.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}else {
+		SclassDao f1 = new SclassDao();
+		ResultSet rs1 = f1.getAllSclass(session, req, resp);
+	}
+		return rs;
+	}
+	
 	
 }

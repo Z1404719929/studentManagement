@@ -127,14 +127,16 @@ public class StudentController extends HttpServlet {
 				user.setPassword(MD5Util.getMD5(password.getBytes()));
 				user.setPhone(phone);
 				int i = registerService.saveUser(user);
+				if(user.getPhone().length()==11) {
 				if (i == 1) {
 					resp.sendRedirect("login.jsp");
 				} else {
-					resp.sendRedirect("error.jsp");
+					resp.sendRedirect("register_fail2.jsp");
 				}
 			} else {
-				resp.sendRedirect("error.jsp");
+				resp.sendRedirect("register_fail1.jsp");
 			}
+				}
 		} else if (action.equals("login")) {
 			// img_code = req.getParameter("img_code");
 			// System.out.println(img_code);
@@ -281,10 +283,14 @@ public class StudentController extends HttpServlet {
 			}
 		}
 
-		if (action.equals("search")) { // 搜索功能
+		if (action.equals("search")) { // 学生搜索功能
 			StudentDao sd = new StudentDao();
 			ResultSet rs = sd.getSearch(session, req, resp);
 		}
 
+		if (action.equals("class_search")) { // 班级搜索功能
+			SclassDao scd = new SclassDao();
+			ResultSet rs = scd.getSearch(session, req, resp);
+		}
 	}
 }

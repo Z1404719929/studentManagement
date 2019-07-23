@@ -193,7 +193,7 @@ body{
     }
     
     .main input {
-         margin-bottom: 30px;
+         margin-bottom: 20px;
          width: 200px;
          height: 40px;
          border-radius: 6px;

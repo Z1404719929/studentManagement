@@ -192,6 +192,24 @@ body{
     .btn{
     display:inline-block;
     }
+    
+     .main input {
+         margin-bottom: 20px;
+         width: 200px;
+         height: 40px;
+         border-radius: 6px;
+	    padding: 10px;
+	    box-sizing: border-box;
+	    font-size: 16px;
+	    border: 1px solid #999;
+	    outline: none;
+      }
+    .ma tr{
+    background-color: #ffffff;
+    }
+    .ma td{
+    background-color: #ffffff;
+    }
 </style>
 
 </head>
@@ -208,7 +226,15 @@ body{
       </div>
    </div>
    <div class="main">
-   		<button class="addstu"><a href="add_class.jsp">新增班级</a></button>
+   <form method="post" action="class_search.do">
+   		<table class="ma">
+   		<tr>
+   		<td><button class="addstu"><a href="add_class.jsp">新增班级</a></button></td>
+   		<td><input type="text" name="class_search"/></td>
+   		<td><button class="addstu" >搜索</button></td>
+   		</tr>
+   		</table>
+   		</form>
    		<table border="1"  cellpadding="0" cellspacing="0">
    			<thead>
    				<tr>

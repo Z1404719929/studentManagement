@@ -224,6 +224,8 @@ public class StudentDao {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		String search = req.getParameter("search");
+		System.out.println("查询内容"+search);
+		if(search!="") {
 		try {
 			ps = conn.prepareStatement(
 					"select * from student where no=? or name=? or sex=? or sclass=? or major=? or school=? or email=? or phone=?");
@@ -270,6 +272,10 @@ public class StudentDao {
 				}
 			}
 		}
+	}else {
+		StudentDao sd = new StudentDao();
+		ResultSet rs1 = sd.getAllStudent(session, req, resp);
+	}
 		return rs;
 
 	}
