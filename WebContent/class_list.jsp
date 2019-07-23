@@ -1,5 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    <%@ page import="java.util.List" %>
+    <%@ page import="java.util.ArrayList" %>
+    <%@ page import="com.datang.hrb.vo.*" %>
+    
+    <% List<Sclass> SclassList=(ArrayList<Sclass>)session.getAttribute("SclassList"); %>
+    
 <!DOCTYPE html>
 <html>
 <head>
@@ -183,6 +189,9 @@ body{
     	font-size: 14px;
     	margin-left: 10px;
     }
+    .btn{
+    display:inline-block;
+    }
 </style>
 
 </head>
@@ -195,7 +204,7 @@ body{
           <li class="menu-home" >班级管理</li>
          </ul>
           <span>XXX</span>
-          <a href class="exit" >退出</a>
+          <a href="login.jsp" class="exit" >退出</a>
       </div>
    </div>
    <div class="main">
@@ -211,29 +220,36 @@ body{
    				</tr>
    			</thead>
    			<tbody>
-   			<%for(int i = 0; i<20; i++){ %>
+   			<%for(int i = 0; i<SclassList.size(); i++){ 
+   			Sclass sc=SclassList.get(i);%>
    				<tr>
-   					<td class="classname">大数据XXX班</td>
-   					<td class="schoolname">XXXX大学</td>
-   					<td class="majorname">XXXX专业</td>
-   					<td>56</td>
+   					<td class="classname" ><%=sc.getName() %></td>
+   					<td class="schoolname"><%=sc.getYx() %></td>
+   					<td class="majorname"><%=sc.getZy() %></td>
+   					<td><%=sc.getNum() %></td>
    					<td class="operation">
-   						<button class="redact"><a href="redact_class.jsp">编辑</a></button>
+   					<form method="post" action="class_redact.do" class="btn">
+   						<input type="hidden" name="sc_code"  value="<%=sc.getName() %>"/>
+   						<button class="redact">编辑</button>
+   						</form>
+   					<form method="post" action="class_delete.do" class="btn">
+   					<input type="hidden" name="sc_no"  value="<%=sc.getName() %>"/>
    						<button class="del">删除</button>
+   						</form>
    					</td>
    				</tr>
    				<%} %>
    			</tbody>
    		</table>
    </div>
-	<div class="paging">
-		<%for(int i = 0; i<5; i++){ %>
+	<%-- <div class="paging">
+		<%for(int i = 0; i<1; i++){ %>
 			<span class="pages"><%=i+1 %></span>
 			<%} %>
 			<input type="text" />
 			<button class="linkto">跳转</button>
 			<span class="total">共   X页</span>
-	</div>
+	</div> --%>
 	<script>
 		var test = window.location.href;
 		if((test.substring(test.lastIndexOf('/')+1,test.indexOf(".jsp"))) == "class_list"){

@@ -7,6 +7,7 @@
     
     <% List<Student> StudentList=(ArrayList<Student>)session.getAttribute("StudentList"); %>
     
+    
 <!DOCTYPE html>
 <html>
 <head>
@@ -144,20 +145,20 @@ body{
           <li class="menu-home" ><a href="class_list.jsp">班级管理</a></li>
          </ul>
           <span>XXX</span>
-          <a href class="exit" >退出</a>
+          <a href="login.jsp"  class="exit" >退出</a>
       </div>
    </div>
    <div class="main">
    		<a href="student_list.jsp">返回学生列表页</a>
    		<form method="post" action="add.do">
-   			<span>学员学号：</span> <input type="text" name="no" "/><br />
-   			<span>姓名：</span> <input type="text" name="name"/><br />
-   			<span>性别：</span> <input type="text" name="sex"/><br />
-   			<span>班级名称：</span> <input type="text"  name="sclass"/><br />
-   			<span>专业名称：</span> <input type="text" name="major"/><br />
-   			<span>学校名称：</span> <input type="text" name="school"/><br />
-   			<span>邮箱：</span> <input type="text" name="email"/><br />
-   			<span>手机号：</span> <input type="text" name="phone"/><br />
+   			<span>学员学号：</span> <input type="text" name="no"  required="required"  /><br />
+   			<span>姓名：</span> <input type="text" name="name"required="required"  /><br />
+   			<span>性别：</span> <input type="text" name="sex" required="required"  /><br />
+   			<span>班级名称：</span> <input type="text"  name="sclass"required="required"  /><br />
+   			<span>专业名称：</span> <input type="text" name="major"required="required"  /><br />
+   			<span>学校名称：</span> <input type="text" name="school"required="required"/><br />
+   			<span>邮箱：</span> <input type="text" name="email" required="required"/><br />
+   			<span>手机号：</span> <input type="text" name="phone" required="required" placeholder="11位0-9的数字" /><br />
    			<input class="save" type="submit" value="保存" />
    		</form>
    </div>

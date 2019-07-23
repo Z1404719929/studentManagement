@@ -186,6 +186,9 @@ body{
     	font-size: 14px;
     	margin-left: 10px;
     }
+    .btn{
+    display:inline-block;
+    }
 </style>
 
 </head>
@@ -198,7 +201,7 @@ body{
           <li class="menu-home" > <a href="class_list.jsp">班级管理</a></li>
          </ul>
           <span>XXX</span>
-          <a href class="exit" >退出</a>
+          <a href="login.jsp"  class="exit" >退出</a>
       </div>
    </div>
    <div class="main">
@@ -230,11 +233,11 @@ body{
    					<td class="email"><%=stu.getEmail() %></td>
    					<td><%=stu.getPhone() %></td>
    					<td>
-   					<form method="post" action="redact.do">
+   					<form method="post" action="redact.do" class="btn">
    						<input type="hidden" name="stu_code"  value="<%=stu.getNo() %>"/>
    						<button type=""submit class="redact">编辑</button>
    					</form>
-   					<form method="post" action="delete.do">
+   					<form method="post" action="delete.do" class="btn">
    					<input type="hidden" name="stu_no"  value="<%=stu.getNo() %>"/>
    						<button class="del">删除</button>
    						</form>
@@ -244,7 +247,7 @@ body{
    			</tbody>
    		</table>
    </div>
-	<div class="paging">
+	<%-- <div class="paging">
 	<%double num=Math.ceil(StudentList.size()/20); %>
 		<%for(int i = 0; i<=num; i++){ %>
 			<span class="pages"><%=i +1%></span>
@@ -252,7 +255,7 @@ body{
 			<input type="text" />
 			<button class="linkto">跳转</button>
 			<span class="total">共 x页</span>
-	</div>
+	</div> --%>
 	<script>
 		var test = window.location.href;
 		if((test.substring(test.lastIndexOf('/')+1,test.indexOf(".jsp"))) == "student_list"){

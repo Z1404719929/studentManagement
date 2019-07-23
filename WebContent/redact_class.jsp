@@ -1,5 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    
+    <%@ page import="java.util.List" %>
+    <%@ page import="java.util.ArrayList" %>
+    <%@ page import="com.datang.hrb.vo.*" %>
+    
+    <% Sclass sc=(Sclass)session.getAttribute("sc"); %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -137,15 +143,15 @@ body{
           <li class="menu-home" ><a href="class_list.jsp">班级管理</a></li>
          </ul>
           <span>XXX</span>
-          <a href class="exit" >退出</a>
+          <a href="login.jsp"  class="exit" >退出</a>
       </div>
    </div>
    <div class="main">
    		<a href="student_list.jsp">返回班级列表页</a>
-   		<form>
-   			<span>班级名称：</span> <input type="text" /><br />
-   			<span>所属院校：</span> <input type="text" /><br />
-   			<span>所属专业：</span> <input type="text" /><br />
+   		<form method="post" action="class_redact_ok.do">
+   			<span>班级名称：</span> <input type="text"  value="<%=sc.getName()%>"  name="教室名称" required="required"/><br />
+   			<span>所属院校：</span> <input type="text" value="<%=sc.getYx()%>"  name="所属院校" required="required"/><br />
+   			<span>所属专业：</span> <input type="text" value="<%=sc.getZy()%>"  name="所属专业" required="required"/><br />
    			<input class="save" type="submit" value="保存" />
    		</form>
    </div>
