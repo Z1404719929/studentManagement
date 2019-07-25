@@ -203,7 +203,9 @@ public class StudentController extends HttpServlet {
 				//StudentDao sd = new StudentDao();
 			//	ResultSet rs = sd.getAllStudent(session, req,resp,num);
 				// resp.sendRedirect("student_list.jsp");
-				resp.sendRedirect("student_list.jsp");
+				FirstDao fd=new FirstDao();
+				fd.getFy(session, req, resp, 1);
+				//resp.sendRedirect("student_list.jsp");
 			} else {
 				resp.sendRedirect("error.jsp");
 			}
@@ -243,7 +245,7 @@ public class StudentController extends HttpServlet {
 			if (i == 1) {
 			//ResultSet rs = sd.getAllStudent(session, req, resp,num);
 			FirstDao fd=new FirstDao();
-			fd.getFy(session, req, resp, num);
+			fd.getFy(session, req, resp, 1);
 			} else {
 				resp.sendRedirect("error.jsp");
 			}
@@ -264,7 +266,9 @@ public class StudentController extends HttpServlet {
 			StudentDao sd = new StudentDao();
 			int i = sd.deletestu(stu_no, req, resp);
 			if (i == 1) {
-			ResultSet rs = sd.getAllStudent(session, req, resp,num);
+				FirstDao fd=new FirstDao();
+				fd.getFy(session, req, resp, 1);
+			//ResultSet rs = sd.getAllStudent(session, req, resp,num);
 			} else {
 				resp.sendRedirect("error.jsp");
 			}
