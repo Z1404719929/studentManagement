@@ -268,14 +268,19 @@ body{
    			</tbody>
    		</table>
    </div>
-	<%-- <div class="paging">
-		<%for(int i = 0; i<1; i++){ %>
-			<span class="pages"><%=i+1 %></span>
+	<div class="paging">
+		<%double num=Math.ceil((SclassList.size())/1); 
+			int i=0;%>
+		<%for(i = 0; i<1; i++){ %>
+			<form method="post" action="class_pages.do"  class="btn">
+			<input type="hidden" name="class_pages"  value="<%=i+1%>"/>
+			<button class="del"><a href="class_list.jsp">1</a></button>
+			</form>
 			<%} %>
-			<input type="text" />
-			<button class="linkto">跳转</button>
-			<span class="total">共   X页</span>
-	</div> --%>
+			<input type="text" name="n"/>
+			<button class="del"><a href="class_list.jsp">跳转</a></button>
+			<span class="total">共1页</span>
+	</div>
 	<script>
 		var test = window.location.href;
 		if((test.substring(test.lastIndexOf('/')+1,test.indexOf(".jsp"))) == "class_list"){

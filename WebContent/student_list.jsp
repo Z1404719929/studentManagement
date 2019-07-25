@@ -5,6 +5,7 @@
     <%@ page import="com.datang.hrb.vo.*" %>
     
     <% List<Student> StudentList=(ArrayList<Student>)session.getAttribute("StudentList"); %>
+    <% List<Student> StudentLimit=(ArrayList<Student>)session.getAttribute("StudentLimit"); %>
     <% String accounts=(String)session.getAttribute("accounts"); %>
    <%--  <% String page=(String)session.getAttribute("page"); %> --%>
 <!DOCTYPE html>
@@ -251,8 +252,8 @@ body{
    				</tr>
    			</thead>
    			<tbody>
-   			<%for(int i = 0; i<StudentList.size(); i++){ 
-   			Student stu=StudentList.get(i);%>
+   			<%for(int i = 0; i<StudentLimit.size(); i++){ 
+   			Student stu=StudentLimit.get(i);%>
    				<tr>
    					<td><%=stu.getNo() %></td>
    					<td><%=stu.getName() %></td>
@@ -265,7 +266,7 @@ body{
    					<td>
    					<form method="post" action="redact.do" class="btn">
    						<input type="hidden" name="stu_code"  value="<%=stu.getNo() %>"/>
-   						<button type=""submit class="redact">编辑</button>
+   						<button type="submit" class="redact">编辑</button>
    					</form>
    					<form method="post" action="delete.do" class="btn">
    					<input type="hidden" name="stu_no"  value="<%=stu.getNo() %>"/>
@@ -278,15 +279,18 @@ body{
    		</table>
    </div>
 	<div class="paging">
-	<%double num=Math.ceil(StudentList.size()/20); 
+	<%double num=Math.round((StudentList.size()+4)/5); 
 			int i=0;%>
-		<%for(i = 0; i<=num; i++){ %>
-		
-			<span class="pages" ><%=i +1%></span>
-		
+		<%for(i = 0; i<num; i++){ %>
+			<form method="post" action="pages.do"  class="btn">
+				<input type="hidden" name="pages"  value="<%=i+1%>"/>
+				<button class="del"><%=i+1 %></button>
+			</form>
 			<%} %>
-			<input type="text" />
-			<button class="linkto">跳转</button>
+			<form method="post" action="tz.do"  class="btn">
+			<input type="text" name="n"/>
+			<button class="del">跳转</button>
+			</form>
 			<span class="total">共 <%=i %>页</span>
 	</div>
 	<script>

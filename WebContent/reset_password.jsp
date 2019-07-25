@@ -103,7 +103,7 @@
         <p class="title">找回密码</p>
         <form method="post" action="resetp.do">
         <input type="text" placeholder="请输入用户名" name="accounts"><br />
-        <input type="number" placeholder="请输入手机号" name="phone"><br />
+        <input type="text" placeholder="请输入手机号" name="phone" maxlength=11 onblur="if(/\d{11}/gi.test(this.value)?true:false){0}else{alert('手机号十一位数字');}"/><br />
         <input type="password" placeholder="请输入新密码" name="password"><br />
         <input type="submit" class="button" value="提交">
         </form>
@@ -112,6 +112,6 @@
         </p>
       </div>
     </div>
-    
+
 </body>
 </html>

@@ -1,3 +1,4 @@
+
 package com.datang.hrb.controller;
 
 import java.awt.image.RenderedImage;
@@ -19,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.datang.hrb.dao.ConnectionUtil;
+import com.datang.hrb.dao.FirstDao;
 import com.datang.hrb.dao.SclassDao;
 import com.datang.hrb.dao.StudentDao;
 import com.datang.hrb.dao.UserDao;
@@ -118,6 +120,13 @@ public class StudentController extends HttpServlet {
 		String uri = req.getRequestURI();
 		String action = uri.substring(uri.lastIndexOf("/") + 1, uri.indexOf(".do"));
 		HttpSession session = req.getSession();
+		
+		
+		String page=req.getParameter("pages");
+		System.out.println("pages=="+req.getParameter("pages"));
+		Integer num = req.getParameter("pages") != null && !req.getParameter("pages").equals("") ? Integer.parseInt(req.getParameter("pages")) : null;
+		System.out.println("搜索"+num);
+		
 
 		if (action.equals("register")) {
 			if (accounts != "" && password != "") {
@@ -140,6 +149,8 @@ public class StudentController extends HttpServlet {
 		} else if (action.equals("login")) {
 			// img_code = req.getParameter("img_code");
 			// System.out.println(img_code);
+			System.out.println("456"+page+5);
+			//System.out.println("789"+page.equals(0));
 			System.out.println("login");
 			User user = new User();
 			user.setAccounts(accounts);
@@ -148,10 +159,9 @@ public class StudentController extends HttpServlet {
 			if (u.getUsername(accounts) == 1) {
 				user.setPassword(MD5Util.getMD5(password.getBytes()));
 				LoginService loginService = new LoginServiceImpl();
-				System.out.println("6");
+				//System.out.println("6");
 				if (loginService.login(user) == "student_list.jsp") {
-					// img_code = req.getParameter("img_code");
-					// System.out.println("session保存的验证码=="+session.getAttribute("code"));
+					
 					if (session.getAttribute("code").equals(req.getParameter("img_code"))) {
 						// System.out.println("session保存的验证码=="+session.getAttribute("code"));
 						session = req.getSession();
@@ -159,8 +169,10 @@ public class StudentController extends HttpServlet {
 
 						/* resp.sendRedirect("student_list.jsp"); */
 						System.out.println("4");
-						StudentDao sd = new StudentDao();
-						ResultSet rs = sd.getAllStudent(session, req, resp);
+						//StudentDao sd = new StudentDao();
+						//ResultSet rs = sd.getAllStudent(session, req, resp,num);
+						FirstDao fd1=new FirstDao();
+						fd1.getFy(session, req, resp,1);
 						// password = MD5Util.getMD5(password.getBytes());
 					} else {
 						System.out.println("验证码问题");
@@ -188,11 +200,12 @@ public class StudentController extends HttpServlet {
 			StudentService studentService = new StudentServiceImpl();
 			int i = studentService.addStudent(s, session);
 			if (i == 1) {
-				StudentDao sd = new StudentDao();
-				ResultSet rs = sd.getAllStudent(session, req, resp);
+				//StudentDao sd = new StudentDao();
+			//	ResultSet rs = sd.getAllStudent(session, req,resp,num);
 				// resp.sendRedirect("student_list.jsp");
+				resp.sendRedirect("student_list.jsp");
 			} else {
-				resp.sendRedirect("add_stu.jsp");
+				resp.sendRedirect("error.jsp");
 			}
 
 		}
@@ -228,7 +241,9 @@ public class StudentController extends HttpServlet {
 			StudentDao sd = new StudentDao();
 			int i = sd.alterstu(stu_code, req, resp);
 			if (i == 1) {
-				ResultSet rs = sd.getAllStudent(session, req, resp);
+			//ResultSet rs = sd.getAllStudent(session, req, resp,num);
+			FirstDao fd=new FirstDao();
+			fd.getFy(session, req, resp, num);
 			} else {
 				resp.sendRedirect("error.jsp");
 			}
@@ -249,7 +264,7 @@ public class StudentController extends HttpServlet {
 			StudentDao sd = new StudentDao();
 			int i = sd.deletestu(stu_no, req, resp);
 			if (i == 1) {
-				ResultSet rs = sd.getAllStudent(session, req, resp);
+			ResultSet rs = sd.getAllStudent(session, req, resp,num);
 			} else {
 				resp.sendRedirect("error.jsp");
 			}
@@ -285,12 +300,33 @@ public class StudentController extends HttpServlet {
 
 		if (action.equals("search")) { // 学生搜索功能
 			StudentDao sd = new StudentDao();
-			ResultSet rs = sd.getSearch(session, req, resp);
+			System.out.println("学生搜索");
+			ResultSet rs = sd.getSearch(session, req, resp,1);
 		}
 
 		if (action.equals("class_search")) { // 班级搜索功能
 			SclassDao scd = new SclassDao();
 			ResultSet rs = scd.getSearch(session, req, resp);
 		}
+		
+		
+		if(action.equals("pages")) {
+			StudentDao sd = new StudentDao();
+			FirstDao fd1=new FirstDao();
+			fd1.getFy(session, req, resp,num);
+		}
+		
+		
+		if(action.equals("tz")) {
+			System.out.println("pages=="+req.getParameter("pages"));
+			System.out.println("num=="+num);
+			String tz=req.getParameter("n");
+			StudentDao sd = new StudentDao();
+			FirstDao fd1=new FirstDao();
+			fd1.getFy(session, req, resp,num);
+		}
+		
+		
+		
 	}
 }

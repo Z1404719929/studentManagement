@@ -23,36 +23,12 @@ public class StudentDao {
 	 * @throws IOException
 	 */
 
-	/*
-	 * public ResultSet getAllStudent(HttpSession session, HttpServletRequest req,
-	 * HttpServletResponse resp) throws IOException { //cs Connection conn =
-	 * ConnectionUtil.getConnection(); PreparedStatement ps = null; ResultSet rs =
-	 * null; try { ps = conn.prepareStatement("select * from student limit ?,?"); rs
-	 * = ps.executeQuery();
-	 * 
-	 * if (rs != null) { List<Student> StudentList = new ArrayList<Student>(); while
-	 * (rs.next()) { Student s = new Student(); s.setNo(rs.getString(1));
-	 * s.setName(rs.getString(2)); s.setSex(rs.getString(3));
-	 * s.setSclass(rs.getString(4)); s.setMajor(rs.getString(5));
-	 * s.setSchool(rs.getString(6)); s.setEmail(rs.getString(7));
-	 * s.setPhone(rs.getString(8)); StudentList.add(s); }
-	 * session.setAttribute("StudentList", StudentList);
-	 * 
-	 * FirstDao f1 = new FirstDao(); ResultSet rs1 = f1.getAllSclass(session, req,
-	 * resp); //resp.sendRedirect("student_list.jsp"); } else {
-	 * resp.sendRedirect("error.jsp"); } } catch (SQLException e) {
-	 * resp.sendRedirect("error.jsp"); e.printStackTrace(); } finally { if (ps !=
-	 * null) { try { ps.close(); } catch (SQLException e) { e.printStackTrace(); } }
-	 * } return rs;
-	 * 
-	 * }
-	 */
-
-	public ResultSet getAllStudent(HttpSession session, HttpServletRequest req, HttpServletResponse resp)
+	public ResultSet getAllStudent(HttpSession session, HttpServletRequest req, HttpServletResponse resp,Integer num)
 			throws IOException {
 		Connection conn = ConnectionUtil.getConnection();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
+		
 		try {
 			ps = conn.prepareStatement("select * from student");
 			rs = ps.executeQuery();
@@ -72,9 +48,12 @@ public class StudentDao {
 					StudentList.add(s);
 				}
 				session.setAttribute("StudentList", StudentList);
-
 				FirstDao f1 = new FirstDao();
-				ResultSet rs1 = f1.getAllSclass(session, req, resp); // resp.sendRedirect("student_list.jsp");
+				ResultSet rs1 = f1.getAllSclass(session, req, resp); 
+				//FirstDao f1 = new FirstDao();
+				//ResultSet rs1 = f1.getAllSclass(session, req, resp); 
+				
+				// resp.sendRedirect("student_list.jsp"); 
 				} else {
 				resp.sendRedirect("error.jsp");
 			}
@@ -94,7 +73,7 @@ public class StudentDao {
 
 	}
 
-	public int addstudent(Student s, HttpSession session) { // 增加学生
+	public int addstudent(Student s, HttpSession session) throws IOException { // 增加学生
 		int i = 0;
 		if (s.getNo() != "" && s.getName() != "" && s.getSex() != "" && s.getSclass() != "" && s.getMajor() != ""
 				&& s.getSchool() != "" && s.getEmail() != "" && s.getPhone() != "") {
@@ -218,66 +197,69 @@ public class StudentDao {
 		return i;
 	}
 
-	public ResultSet getSearch(HttpSession session, HttpServletRequest req, HttpServletResponse resp)
+	public ResultSet getSearch(HttpSession session, HttpServletRequest req, HttpServletResponse resp,int num)
 			throws IOException { // 学生搜索
 		Connection conn = ConnectionUtil.getConnection();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		String search = req.getParameter("search");
-		System.out.println("查询内容"+search);
-		if(search!="") {
-		try {
-			ps = conn.prepareStatement(
-					"select * from student where no=? or name=? or sex=? or sclass=? or major=? or school=? or email=? or phone=?");
-			ps.setString(1, search);
-			ps.setString(2, search);
-			ps.setString(3, search);
-			ps.setString(4, search);
-			ps.setString(5, search);
-			ps.setString(6, search);
-			ps.setString(7, search);
-			ps.setString(8, search);
-			rs = ps.executeQuery();
-			if (rs != null) {
-				List<Student> StudentList = new ArrayList<Student>();
-				while (rs.next()) {
-					Student s = new Student();
-					s.setNo(rs.getString(1));
-					s.setName(rs.getString(2));
-					s.setSex(rs.getString(3));
-					s.setSclass(rs.getString(4));
-					s.setMajor(rs.getString(5));
-					s.setSchool(rs.getString(6));
-					s.setEmail(rs.getString(7));
-					s.setPhone(rs.getString(8));
-					StudentList.add(s);
-				}
-				session.setAttribute("StudentList", StudentList);
-				System.out.println();
-				FirstDao f1 = new FirstDao();
-				ResultSet rs1 = f1.getAllSclass(session, req, resp);
-				// resp.sendRedirect("student_list.jsp");
-			} else {
-				resp.sendRedirect("error.jsp");
-			}
-		} catch (SQLException e) {
-			resp.sendRedirect("error.jsp");
-			e.printStackTrace();
-		} finally {
-			if (ps != null) {
-				try {
-					ps.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	}else {
-		StudentDao sd = new StudentDao();
-		ResultSet rs1 = sd.getAllStudent(session, req, resp);
-	}
-		return rs;
+		System.out.println("查询内容" + search);
+		if (search != "") {
+			try {
+				ps = conn.prepareStatement(
+						"select * from student where no=? or name=? or sex=? or sclass=? or major=? or school=? or email=? or phone=?");
+				ps.setString(1, search);
+				ps.setString(2, search);
+				ps.setString(3, search);
+				ps.setString(4, search);
+				ps.setString(5, search);
+				ps.setString(6, search);
+				ps.setString(7, search);
+				ps.setString(8, search);
+				rs = ps.executeQuery();
+				if (rs != null) {
+					List<Student> StudentLimit = new ArrayList<Student>();
+					while (rs.next()) {
+						Student s = new Student();
+						s.setNo(rs.getString(1));
+						s.setName(rs.getString(2));
+						s.setSex(rs.getString(3));
+						s.setSclass(rs.getString(4));
+						s.setMajor(rs.getString(5));
+						s.setSchool(rs.getString(6));
+						s.setEmail(rs.getString(7));
+						s.setPhone(rs.getString(8));
+						StudentLimit.add(s);
+					}
+					//session.setAttribute("StudentList", StudentLimit);
+					session.setAttribute("StudentLimit", StudentLimit);
+					System.out.println("AS");
+					FirstDao f1 = new FirstDao();
+					ResultSet rs1 = f1.getFyCX(session, req, resp,num);
 
+					//FirstDao f1 = new FirstDao();
+					//ResultSet rs1 = f1.getClassFy(session, req, resp,num);
+					 //resp.sendRedirect("student_list.jsp");
+				} else {
+					resp.sendRedirect("error.jsp");
+				}
+			} catch (SQLException e) {
+				resp.sendRedirect("error.jsp");
+				e.printStackTrace();
+			} finally {
+				if (ps != null) {
+					try {
+						ps.close();
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		} else {
+			StudentDao sd = new StudentDao();
+			ResultSet rs1 = sd.getAllStudent(session, req, resp,num);
+		}
+		return rs;
 	}
 
 }

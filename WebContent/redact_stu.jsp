@@ -151,14 +151,14 @@ body{
    <div class="main">
    		<a href="student_list.jsp">返回学生列表页</a>
    		<form method="post" action="redact_ok.do">
-   			<span>学员学号：</span> <input type="text" value="<%=s.getNo()%>"  name="no"required="required"  /><br />
+   			<span>学员学号：</span> <input type="text" value="<%=s.getNo()%>"  name="no"required="required"  maxlength=8/><br />
    			<span>姓名：</span> <input type="text"  value="<%=s.getName()%>" name="name"required="required"  /><br />
    			<span>性别：</span> <input type="text"  value="<%=s.getSex()%>"name="sex" required="required"  /><br />
    			<span>班级名称：</span> <input type="text"   value="<%=s.getSclass()%>"name="sclass"  required="required"  /><br />
    			<span>专业名称：</span> <input type="text"  value="<%=s.getMajor()%>"name="major"  required="required"  /><br />
    			<span>学校名称：</span> <input type="text"  value="<%=s.getSchool()%>"name="school"  required="required"  /><br />
    			<span>邮箱：</span> <input type="text"  value="<%=s.getEmail()%>"name="email"  required="required"  /><br />
-   			<span>手机号：</span> <input type="text"  value="<%=s.getPhone()%>"name="phone" required="required" /><br />
+   			<span>手机号：</span> <input type="text"  value="<%=s.getPhone()%>"name="phone" required="required" maxlength=11 onblur="if(/\d{11}/gi.test(this.value)?true:false){0}else{alert('手机号十一位数字');}"/><br />
    			<input class="save" type="submit" value="保存" />
    		</form>
    </div>

@@ -112,7 +112,7 @@ alert("太长了");
         <p class="title">注册</p>
         <form  method="post" action="register.do">
         <input type="text" name="accounts" placeholder="请输入用户名"  required="required" /><br />
-        <input type="number" name="phone" placeholder="请输入手机号"  required="required"   /><br />
+        <input type="text" name="phone" placeholder="请输入手机号"  required="required"maxlength=11 onblur="if(/\d{11}/gi.test(this.value)?true:false){0}else{alert('手机号十一位数字');}"/><br />
         <input type="password" name="password" placeholder="请输入密码"  required="required" /><br />
         <input type="submit" class="button" value="注册">
         </form>
